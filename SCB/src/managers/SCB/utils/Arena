@@ -1,0 +1,141 @@
+/*     */ package managers.SCB.utils;
+/*     */ 
+/*     */ import Pauldg7.plugins.SCB.interfaces.ClassInterface;
+/*     */ import Pauldg7.plugins.SCB.main.SCB;
+/*     */ import java.io.File;
+/*     */ import java.io.IOException;
+/*     */ import java.util.HashMap;
+/*     */ import org.bukkit.Location;
+/*     */ import org.bukkit.configuration.file.FileConfiguration;
+/*     */ import org.bukkit.configuration.file.YamlConfiguration;
+/*     */ import org.bukkit.entity.Player;
+/*     */ import org.bukkit.inventory.ItemStack;
+/*     */ import org.bukkit.inventory.PlayerInventory;
+/*     */ import org.bukkit.plugin.Plugin;
+/*     */ 
+/*     */ public class PlayerManager
+/*     */ {
+/*  18 */   HashMap<String, ClassInterface> plClass = new HashMap();
+/*     */ 
+/*  20 */   HashMap<String, Boolean> ingame = new HashMap();
+/*     */ 
+/*  22 */   HashMap<String, Location> pos1 = new HashMap();
+/*     */ 
+/*  24 */   HashMap<String, Location> pos2 = new HashMap();
+/*     */ 
+/*  26 */   HashMap<Player, Integer> live = new HashMap();
+/*     */ 
+/*  28 */   HashMap<Player, ItemStack[]> inventory = new HashMap();
+/*  29 */   HashMap<Player, ItemStack[]> armor = new HashMap();
+/*     */ 
+/*  31 */   Plugin plugin = SCB.getInstance();
+/*     */ 
+/*  33 */   String plyFile = this.plugin.getDataFolder() + File.separator + "players" + File.separator;
+/*     */ 
+/*  35 */   String araFile = this.plugin.getDataFolder() + File.separator + "arenas" + File.separator;
+/*     */ 
+/*  37 */   public static PlayerManager pmngr = new PlayerManager();
+/*     */ 
+/*     */   public static PlayerManager get() {
+/*  40 */     return pmngr;
+/*     */   }
+/*     */   public boolean ingame(Player p) {
+/*  43 */     if (this.ingame.get(p.getName()) == null) {
+/*  44 */       this.ingame.put(p.getName(), Boolean.valueOf(false));
+/*     */     }
+/*  46 */     if (((Boolean)this.ingame.get(p.getName())).booleanValue()) {
+/*  47 */       return true;
+/*     */     }
+/*     */ 
+/*  50 */     return false;
+/*     */   }
+/*     */ 
+/*     */   public ClassInterface getClasse(Player p) {
+/*  54 */     if ((((Boolean)this.ingame.get(p.getName())).booleanValue()) && (this.plClass.get(p.getName()) != null)) {
+/*  55 */       return (ClassInterface)this.plClass.get(p.getName());
+/*     */     }
+/*  57 */     return null;
+/*     */   }
+/*     */   public void newPlayer(Player p) {
+/*  60 */     File f = new File(this.plyFile + p.getName() + ".yml");
+/*  61 */     if (!f.exists()) {
+/*  62 */       File F = new File(this.plyFile + p.getName() + ".yml");
+/*  63 */       FileConfiguration c = YamlConfiguration.loadConfiguration(F);
+/*  64 */       c.set("Gems", "0");
+/*  65 */       c.set("Wins", "0");
+/*  66 */       c.set("Losses", "0");
+/*     */       try {
+/*  68 */         c.save(F);
+/*     */       } catch (IOException e) {
+/*  70 */         e.printStackTrace();
+/*     */       }
+/*     */     }
+/*     */   }
+/*     */ 
+/*     */   public void setPos1(String name, Location loc) {
+/*  76 */     this.pos1.put(name, loc);
+/*     */   }
+/*     */ 
+/*     */   public void setPos2(String name, Location loc) {
+/*  80 */     this.pos2.put(name, loc);
+/*     */   }
+/*     */ 
+/*     */   public Location getPos1(String name) {
+/*  84 */     return (Location)this.pos1.get(name);
+/*     */   }
+/*     */ 
+/*     */   public Location getPos2(String name) {
+/*  88 */     return (Location)this.pos2.get(name);
+/*     */   }
+/*     */ 
+/*     */   public void prepPlayer(Player p)
+/*     */   {
+/*  93 */     ItemStack[] inv = p.getInventory().getContents();
+/*  94 */     ItemStack[] arm = p.getInventory().getArmorContents();
+/*  95 */     this.ingame.put(p.getName(), Boolean.valueOf(true));
+/*     */ 
+/*  99 */     this.inventory.put(p, inv);
+/* 100 */     this.armor.put(p, arm);
+/* 101 */     p.getInventory().clear();
+/* 102 */     p.getInventory().setArmorContents(null);
+/* 103 */     p.updateInventory();
+/*     */   }
+/*     */ 
+/*     */   public void putBackInv(Player p)
+/*     */   {
+/* 108 */     ItemStack[] inv = (ItemStack[])this.inventory.get(p);
+/* 109 */     ItemStack[] arm = (ItemStack[])this.armor.get(p);
+/* 110 */     if ((arm != null) && (inv != null)) {
+/* 111 */       p.getInventory().setContents(inv);
+/* 112 */       p.getInventory().setArmorContents(arm);
+/* 113 */       p.updateInventory();
+/* 114 */       this.armor.put(p, null);
+/* 115 */       this.inventory.put(p, null);
+/*     */     }
+/*     */   }
+/*     */ 
+/*     */   public FileConfiguration getPlayerConfig(Player p) {
+/* 120 */     String pn = p.getName();
+/* 121 */     File f = new File(this.plyFile + pn + ".yml");
+/* 122 */     return YamlConfiguration.loadConfiguration(f);
+/*     */   }
+/*     */ 
+/*     */   public void setClass(Player p, ClassInterface c) {
+/* 126 */     this.plClass.put(p.getName(), c);
+/*     */   }
+/*     */ 
+/*     */   public String getClassName(Player p, ClassInterface c) {
+/* 130 */     return c.id();
+/*     */   }
+/*     */ 
+/*     */   public void setIngame(Player p, boolean b) {
+/* 134 */     String name = p.getName();
+/* 135 */     this.ingame.put(name, Boolean.valueOf(b));
+/*     */   }
+/*     */   public void setLives(Player p, Integer lives) {
+/* 138 */     this.live.put(p, new Integer(lives.intValue()));
+/*     */   }
+/*     */   public Integer getLives(Player p) {
+/* 141 */     return (Integer)this.live.get(p);
+/*     */   }
+/*     */ }
