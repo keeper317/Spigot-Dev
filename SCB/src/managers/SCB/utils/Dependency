@@ -1,0 +1,95 @@
+/*    */ package Pauldg7.plugins.SCB.managers;
+/*    */ 
+/*    */ import Pauldg7.plugins.SCB.main.SCB;
+/*    */ import java.util.ArrayList;
+/*    */ import java.util.logging.Logger;
+/*    */ import net.milkbowl.vault.chat.Chat;
+/*    */ import net.milkbowl.vault.economy.Economy;
+/*    */ import net.milkbowl.vault.permission.Permission;
+/*    */ import org.bukkit.Bukkit;
+/*    */ import org.bukkit.Server;
+/*    */ import org.bukkit.configuration.file.FileConfiguration;
+/*    */ import org.bukkit.plugin.Plugin;
+/*    */ import org.bukkit.plugin.PluginDescriptionFile;
+/*    */ import org.bukkit.plugin.PluginManager;
+/*    */ import org.bukkit.plugin.RegisteredServiceProvider;
+/*    */ import org.bukkit.plugin.ServicesManager;
+/*    */ 
+/*    */ public class Dependency
+/*    */ {
+/* 16 */   Plugin plugin = SCB.getInstance();
+/* 17 */   public static Dependency pmngr = new Dependency();
+/*    */ 
+/* 22 */   public static Permission perms = null;
+/* 23 */   public static Economy econ = null;
+/* 24 */   public static Chat chat = null;
+/* 25 */   private ArrayList<String> dep = new ArrayList();
+/*    */ 
+/*    */   public static Dependency get()
+/*    */   {
+/* 19 */     return pmngr;
+/*    */   }
+/*    */ 
+/*    */   public boolean checkForVault()
+/*    */   {
+/* 28 */     if (this.plugin.getConfig().getBoolean("Vault")) {
+/* 29 */       if (Bukkit.getPluginManager().getPlugin("Vault").isEnabled()) {
+/* 30 */         return true;
+/*    */       }
+/*    */ 
+/* 33 */       this.plugin.getConfig().set("Vault", Boolean.valueOf(false));
+/* 34 */       this.plugin.saveConfig();
+/*    */     }
+/*    */ 
+/* 37 */     return false;
+/*    */   }
+/*    */   public void disableVault() {
+/* 40 */     this.plugin.getConfig().set("Vault", Boolean.valueOf(false));
+/* 41 */     this.plugin.saveConfig();
+/*    */   }
+/*    */   public boolean loadVault() {
+/* 44 */     if (!setupEconomy()) {
+/* 45 */       this.plugin.getLogger().info("Disabling Vault dependency not found! " + this.plugin.getDescription().getName());
+/* 46 */       disableVault();
+/* 47 */       if (this.dep.contains("Vault")) {
+/* 48 */         this.dep.remove("Vault");
+/*    */       }
+/* 50 */       return false;
+/*    */     }
+/* 52 */     setupPermissions();
+/* 53 */     setupChat();
+/* 54 */     this.dep.add("Vault");
+/* 55 */     return true;
+/*    */   }
+/*    */   private boolean setupEconomy() {
+/* 58 */     if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+/* 59 */       return false;
+/*    */     }
+/* 61 */     RegisteredServiceProvider rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
+/* 62 */     if (rsp == null) {
+/* 63 */       return false;
+/*    */     }
+/* 65 */     econ = (Economy)rsp.getProvider();
+/* 66 */     return econ != null;
+/*    */   }
+/*    */ 
+/*    */   private boolean setupChat() {
+/* 70 */     RegisteredServiceProvider chatProvider = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
+/* 71 */     if (chatProvider != null) {
+/* 72 */       chat = (Chat)chatProvider.getProvider();
+/*    */     }
+/* 74 */     return chat != null;
+/*    */   }
+/*    */ 
+/*    */   private boolean setupPermissions() {
+/* 78 */     RegisteredServiceProvider rsp = this.plugin.getServer().getServicesManager().getRegistration(Permission.class);
+/* 79 */     perms = (Permission)rsp.getProvider();
+/* 80 */     return perms != null;
+/*    */   }
+/*    */   public boolean vault() {
+/* 83 */     if (this.dep.contains("Vault")) {
+/* 84 */       return true;
+/*    */     }
+/* 86 */     return false;
+/*    */   }
+/*    */ }
