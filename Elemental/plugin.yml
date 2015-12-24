@@ -1,0 +1,33 @@
+name: Elementals
+main: mediaapps.elemental.Main
+version: 0.1.0
+authors: [MediaApps, keeper317, Cody Larkin]
+description: A game based around the 6 elements
+webstie: http://www.mymediaapps.webs.com
+softdepend: 
+commands:
+    yin:
+        description: Joins team yin
+        usage: Syntax error! Simply type /yin
+    yang:
+        description: Joins team yang
+        usage: Syntax error! Simply type /yang
+    setspec:
+        description: Sets spectator spawn
+        usage: Syntax error! Simply type /setspec
+    setlobby:
+        description: Sets lobby spawn
+        usage: Syntax error! Simply type /setlobby
+    setyin:
+        description: Sets team yin spawn
+        usage: Syntax error! Simply type /setyin
+    setyang:
+        description: Sets team yang spawn
+        usage: Syntax error! Simply type /setyang
+    startgame:
+        description: Force starts game
+        usage: Syntax error! Simply type /startGame
+    endgame:
+        description: Force end of game
+        usage: Syntax error! Simply type /endgame
+permissions:

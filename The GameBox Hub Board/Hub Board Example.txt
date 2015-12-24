@@ -1,0 +1,10 @@
+§6§lThe GameBox
+§a(UserName)
+
+§aBank:
+§bCredits: §c(Credits)
+§6Tokens: §c(Tokens)
+
+§aRank: (rank)
+
+§6Game Box

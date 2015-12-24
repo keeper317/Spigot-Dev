@@ -1,0 +1,9 @@
+name: MySQLBan
+main: mediaapps.sqlban.Main
+version: 0.1
+authors: [MediaApps, keeper317]
+description: MySQL Controller for Root users
+commands:
+   msql:
+      description: Opens Black Hat Shop
+      usage: /msql

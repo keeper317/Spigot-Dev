@@ -1,0 +1,12 @@
+name: BlastJump
+main: com.galaxacraft.cp.BlastJump
+version: 1.0
+author: MyNameIsHariK
+
+commands:
+   blastjumpadmin:
+    description: Set crucial locations.
+    usage: /<command>
+   blastjump:
+    description: Set crucial locations.
+    usage: /<command>

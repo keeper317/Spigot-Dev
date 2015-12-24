@@ -1,0 +1,15 @@
+###Kit Price (if price is 0, the kit is free)
+price: 0
+###Icon in menu
+icon:
+  ###Slot in menu (0-53)
+  slot: 1
+  ###Item in menu (ID,DATA)
+  item: 45,0
+###Description of the kit
+contents:
+  - 20 bricks
+###Item in kit
+items:
+  ###ID,AMOUNT,DATA,ECHANTMENT:LEVEL,ECHANTMENT:LEVEL,ECHANTMENT:LEVEL,..,name:&aCUSTOM NAME,lore:&7CUSTOM LORE,lore:&7CUSTOM LORE,lore:&7CUSTOM LORE,...
+  - 45,20,0

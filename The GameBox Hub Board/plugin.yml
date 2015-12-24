@@ -1,0 +1,7 @@
+name: Hub Board
+main: mediaapps.hubboard.Main
+version: 1.1
+authors: [MediaApps, keeper317]
+description: The GameBox Hub ScoreBoard
+commands:
+   version:

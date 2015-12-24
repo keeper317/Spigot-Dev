@@ -1,0 +1,40 @@
+name: Lily Jumper
+main: mediaapps.LilyPad.Main
+version: 0.2.3
+authors: [MediaApps, keeper317]
+description: LilyPad Jumper Minigame
+hard-depend: [Vault]
+commands:
+   gstart:
+      description: force starts the game
+      usage: /start
+   gfinish:
+      description: force ends the game
+      usage: /stop
+   setstart:
+      description: sets position for start of game
+      usage: /setstart
+   setEnd:
+      description: sets position for end of game
+      usage: /setEnd
+   setFieldStart:
+      description: sets position for start of field
+      usage: /setfieldstart
+   setFieldEnd:
+      description: sets position for end of field
+      usage: /setfieldend
+   LilyShop:
+      description: Opens Shop
+      usage: /LilyShop
+   setLobby:
+      description: sets position for lobby
+      usage: /setlobby
+   setLobbye:
+      description: sets position for lobby entrance
+      usage: /setlobbye
+   setobmsg:
+      description: Sets out of bounds message
+      usage: /setobmsg [message]
+   version:
+      description: Gives Plugin Version
+      usage: /version

@@ -1,0 +1,45 @@
+menu_rows: 1
+default: default
+boxes:
+    default:
+        name: Default
+        desc: default
+        item: 20
+        data: 0
+        slot: 1
+    light_gray:
+        name: Light Gray
+        desc: Rank only
+        item: 95
+        data: 8
+        slot: 2
+    blue:
+        name: Blue
+        desc: Rank only
+        item: 95
+        data: 11
+        slot: 3
+    yellow:
+        name: Yellow
+        desc: Rank only
+        item: 95
+        data: 4
+        slot: 4
+    light_blue:
+        name: Light Blue
+        desc: Rank only
+        item: 95
+        data: 3
+        slot: 5
+    light_green:
+        name: Light Green
+        desc: Rank only
+        item: 95
+        data: 5
+        slot: 6
+    magenta:
+        name: Magenta
+        desc: Rank only
+        item: 95
+        data: 2
+        slot: 7

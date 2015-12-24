@@ -1,0 +1,19 @@
+###Kit Price (if price is 0, the kit is free)
+price: 400
+###Icon in menu
+icon:
+  ###Slot in menu (0-53)
+  slot: 9
+  ###Item in menu (ID,DATA)
+  item: 145,0
+###Description of the kit
+contents:
+  - Anvil
+  - Chain helmet
+  - Enchanted book &7(Protection I)
+###Item in kit
+items:
+  ###ID,AMOUNT,DATA,ECHANTMENT:LEVEL,ECHANTMENT:LEVEL,ECHANTMENT:LEVEL,..,name:&aCUSTOM NAME,lore:&7CUSTOM LORE,lore:&7CUSTOM LORE,lore:&7CUSTOM LORE,...
+  - 145,1,0
+  - 302,1,0
+  - 403,1,0,PROTECTION:1

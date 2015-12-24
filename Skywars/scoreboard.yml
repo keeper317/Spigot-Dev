@@ -1,0 +1,41 @@
+#Scoreboard Variables (Both):
+###  %player% : Player name
+###  %empty% : Empty
+###  %coins% : Get player coins
+
+#Scoreboard Variables (Game):
+###  %a_name% : Arena name
+###  %a_max_p% : Arena max players
+###  %a_ingame_p% : Players in Arena
+
+#Scoreboard and Holographic Variables (Lobby):
+###  %stats_deaths% : Player Deaths
+###  %stats_kills% : Player Kills
+###  %stats_wins% : Player Wins
+###  %stats_played% : Times played
+lobby:
+  enabled: true
+  title: '&e&lSkyWars'
+  lines:
+    - '&5Coins:'
+    - '&a%coins%'
+    - '%empty%'
+    - '&6Server Name'
+game:
+  title: '&e&lSkyWars'
+  lines:
+    - '&5Map:'
+    - '&a%a_name%'
+    - '%empty%'
+    - '&5Players:'
+    - '&a%a_ingame_p%/%a_max_p%'
+    - '%empty%'
+    - '&6Server Name'
+hologram:
+  locations: []
+  lines:
+    - '&a%player%''s &7&k&l|||&3&lSkyWars&7&k&l|||&astatics'
+    - '&aWins&7: &6%stats_wins%'
+    - '&aKills&7: &6%stats_kills%'
+    - '&aDeaths&7: &6%stats_deaths%'
+    - '&aGames played&7: &6%stats_played%'
