@@ -1,141 +1,235 @@
-/*     */ package managers.SCB.utils;
+/*     */ package Pauldg7.plugins.SCB.managers;
 /*     */ 
-/*     */ import Pauldg7.plugins.SCB.interfaces.ClassInterface;
 /*     */ import Pauldg7.plugins.SCB.main.SCB;
 /*     */ import java.io.File;
 /*     */ import java.io.IOException;
-/*     */ import java.util.HashMap;
+/*     */ import java.util.ArrayList;
+/*     */ import java.util.logging.Logger;
+/*     */ import org.bukkit.Bukkit;
+/*     */ import org.bukkit.ChatColor;
 /*     */ import org.bukkit.Location;
+/*     */ import org.bukkit.Material;
+/*     */ import org.bukkit.World;
+/*     */ import org.bukkit.block.Block;
+/*     */ import org.bukkit.block.Sign;
 /*     */ import org.bukkit.configuration.file.FileConfiguration;
 /*     */ import org.bukkit.configuration.file.YamlConfiguration;
 /*     */ import org.bukkit.entity.Player;
-/*     */ import org.bukkit.inventory.ItemStack;
-/*     */ import org.bukkit.inventory.PlayerInventory;
 /*     */ import org.bukkit.plugin.Plugin;
+/*     */ import org.bukkit.scoreboard.DisplaySlot;
+/*     */ import org.bukkit.scoreboard.Objective;
+/*     */ import org.bukkit.scoreboard.Score;
+/*     */ import org.bukkit.scoreboard.Scoreboard;
+/*     */ import org.bukkit.scoreboard.ScoreboardManager;
 /*     */ 
-/*     */ public class PlayerManager
+/*     */ public class Arena
 /*     */ {
-/*  18 */   HashMap<String, ClassInterface> plClass = new HashMap();
+/*  27 */   ArrayList<String> arenaList = new ArrayList();
 /*     */ 
-/*  20 */   HashMap<String, Boolean> ingame = new HashMap();
-/*     */ 
-/*  22 */   HashMap<String, Location> pos1 = new HashMap();
-/*     */ 
-/*  24 */   HashMap<String, Location> pos2 = new HashMap();
-/*     */ 
-/*  26 */   HashMap<Player, Integer> live = new HashMap();
-/*     */ 
-/*  28 */   HashMap<Player, ItemStack[]> inventory = new HashMap();
-/*  29 */   HashMap<Player, ItemStack[]> armor = new HashMap();
-/*     */ 
+/*  30 */   String scb = "§7[§cSCB§7] ";
 /*  31 */   Plugin plugin = SCB.getInstance();
+/*  32 */   String plyFile = this.plugin.getDataFolder() + File.separator + "players" + File.separator;
 /*     */ 
-/*  33 */   String plyFile = this.plugin.getDataFolder() + File.separator + "players" + File.separator;
+/*  34 */   String araFile = this.plugin.getDataFolder() + File.separator + "arenas" + File.separator;
+/*  35 */   public static Arena amanger = new Arena();
 /*     */ 
-/*  35 */   String araFile = this.plugin.getDataFolder() + File.separator + "arenas" + File.separator;
+/*  37 */   public static Arena get() { return amanger; }
 /*     */ 
-/*  37 */   public static PlayerManager pmngr = new PlayerManager();
-/*     */ 
-/*     */   public static PlayerManager get() {
-/*  40 */     return pmngr;
-/*     */   }
-/*     */   public boolean ingame(Player p) {
-/*  43 */     if (this.ingame.get(p.getName()) == null) {
-/*  44 */       this.ingame.put(p.getName(), Boolean.valueOf(false));
+/*     */   public void deleteArena(String arena)
+/*     */   {
+/*  41 */     File f = new File(this.araFile + arena + ".yml");
+/*  42 */     if (f.exists()) {
+/*  43 */       Config.get().deleteFile(arena);
+/*  44 */       this.arenaList.remove(arena);
 /*     */     }
-/*  46 */     if (((Boolean)this.ingame.get(p.getName())).booleanValue()) {
-/*  47 */       return true;
-/*     */     }
-/*     */ 
-/*  50 */     return false;
 /*     */   }
 /*     */ 
-/*     */   public ClassInterface getClasse(Player p) {
-/*  54 */     if ((((Boolean)this.ingame.get(p.getName())).booleanValue()) && (this.plClass.get(p.getName()) != null)) {
-/*  55 */       return (ClassInterface)this.plClass.get(p.getName());
-/*     */     }
-/*  57 */     return null;
-/*     */   }
-/*     */   public void newPlayer(Player p) {
-/*  60 */     File f = new File(this.plyFile + p.getName() + ".yml");
-/*  61 */     if (!f.exists()) {
-/*  62 */       File F = new File(this.plyFile + p.getName() + ".yml");
-/*  63 */       FileConfiguration c = YamlConfiguration.loadConfiguration(F);
-/*  64 */       c.set("Gems", "0");
-/*  65 */       c.set("Wins", "0");
-/*  66 */       c.set("Losses", "0");
+/*     */   public void enableArena(String arena) {
+/*  49 */     if (!this.arenaList.contains(arena)) {
+/*  50 */       FileConfiguration cf = Config.get().getArenaConfig(arena);
+/*  51 */       cf.set("Enabled", Boolean.valueOf(true));
+/*  52 */       this.arenaList.add(arena);
 /*     */       try {
-/*  68 */         c.save(F);
+/*  54 */         cf.save(Config.get().getArenaFile(arena));
 /*     */       } catch (IOException e) {
-/*  70 */         e.printStackTrace();
+/*  56 */         e.printStackTrace();
 /*     */       }
 /*     */     }
 /*     */   }
 /*     */ 
-/*     */   public void setPos1(String name, Location loc) {
-/*  76 */     this.pos1.put(name, loc);
+/*     */   public String[] getArenaList() {
+/*  62 */     String[] ars = new String[this.arenaList.size()];
+/*  63 */     return (String[])this.arenaList.toArray(ars);
 /*     */   }
-/*     */ 
-/*     */   public void setPos2(String name, Location loc) {
-/*  80 */     this.pos2.put(name, loc);
-/*     */   }
-/*     */ 
-/*     */   public Location getPos1(String name) {
-/*  84 */     return (Location)this.pos1.get(name);
-/*     */   }
-/*     */ 
-/*     */   public Location getPos2(String name) {
-/*  88 */     return (Location)this.pos2.get(name);
-/*     */   }
-/*     */ 
-/*     */   public void prepPlayer(Player p)
-/*     */   {
-/*  93 */     ItemStack[] inv = p.getInventory().getContents();
-/*  94 */     ItemStack[] arm = p.getInventory().getArmorContents();
-/*  95 */     this.ingame.put(p.getName(), Boolean.valueOf(true));
-/*     */ 
-/*  99 */     this.inventory.put(p, inv);
-/* 100 */     this.armor.put(p, arm);
-/* 101 */     p.getInventory().clear();
-/* 102 */     p.getInventory().setArmorContents(null);
-/* 103 */     p.updateInventory();
-/*     */   }
-/*     */ 
-/*     */   public void putBackInv(Player p)
-/*     */   {
-/* 108 */     ItemStack[] inv = (ItemStack[])this.inventory.get(p);
-/* 109 */     ItemStack[] arm = (ItemStack[])this.armor.get(p);
-/* 110 */     if ((arm != null) && (inv != null)) {
-/* 111 */       p.getInventory().setContents(inv);
-/* 112 */       p.getInventory().setArmorContents(arm);
-/* 113 */       p.updateInventory();
-/* 114 */       this.armor.put(p, null);
-/* 115 */       this.inventory.put(p, null);
+/*     */   public void disableArena(String arena) {
+/*  66 */     if (this.arenaList.contains(arena)) {
+/*  67 */       File f = Config.get().getArenaFile(arena);
+/*  68 */       FileConfiguration cf = Config.get().getArenaConfig(arena);
+/*  69 */       cf.set("Enabled", "false");
+/*  70 */       this.arenaList.remove(arena);
+/*  71 */       Config.get().saveCustomConfig(f, cf);
 /*     */     }
 /*     */   }
 /*     */ 
-/*     */   public FileConfiguration getPlayerConfig(Player p) {
-/* 120 */     String pn = p.getName();
-/* 121 */     File f = new File(this.plyFile + pn + ".yml");
-/* 122 */     return YamlConfiguration.loadConfiguration(f);
+/*     */   public void loglocation(Location loc, FileConfiguration c, String name) {
+/*  76 */     int locX = loc.getBlockX();
+/*  77 */     int locY = loc.getBlockY();
+/*  78 */     int locZ = loc.getBlockZ();
+/*  79 */     float locP = loc.getPitch();
+/*  80 */     float locYa = loc.getYaw();
+/*  81 */     String world = loc.getWorld().getName();
+/*  82 */     c.set(name + ".X", Integer.valueOf(locX));
+/*  83 */     c.set(name + ".Y", Integer.valueOf(locY));
+/*  84 */     c.set(name + ".Z", Integer.valueOf(locZ));
+/*  85 */     c.set(name + ".P", Float.valueOf(locP));
+/*  86 */     c.set(name + ".Ya", Float.valueOf(locYa));
+/*  87 */     c.set(name + ".World", world);
 /*     */   }
 /*     */ 
-/*     */   public void setClass(Player p, ClassInterface c) {
-/* 126 */     this.plClass.put(p.getName(), c);
+/*     */   public void createArena(String name, Player p) {
+/*  91 */     FileConfiguration c = Config.get().getArenaConfig(name);
+/*  92 */     c.set("ArenaName", name);
+/*  93 */     c.set("Enabled", "false");
+/*  94 */     loglocation(p.getLocation(), c, "Lobby");
+/*  95 */     File arenaConfig = new File(this.araFile + name + ".yml");
+/*     */     try {
+/*  97 */       c.save(arenaConfig);
+/*     */     } catch (IOException e) {
+/*  99 */       this.plugin.getLogger().info("An error has occured saving arenaconfig at createarena method.");
+/* 100 */       e.printStackTrace();
+/*     */     }
 /*     */   }
 /*     */ 
-/*     */   public String getClassName(Player p, ClassInterface c) {
-/* 130 */     return c.id();
+/*     */   public void removeArena(String name) {
+/* 105 */     Config.get().deleteFile(name);
 /*     */   }
 /*     */ 
-/*     */   public void setIngame(Player p, boolean b) {
-/* 134 */     String name = p.getName();
-/* 135 */     this.ingame.put(name, Boolean.valueOf(b));
+/*     */   public boolean getArenaEnabled(String arena) {
+/* 109 */     if (this.arenaList.contains(arena)) {
+/* 110 */       return true;
+/*     */     }
+/* 112 */     return false;
 /*     */   }
-/*     */   public void setLives(Player p, Integer lives) {
-/* 138 */     this.live.put(p, new Integer(lives.intValue()));
+/*     */ 
+/*     */   public void loadArenas() {
+/* 116 */     File file = new File(this.araFile);
+/*     */ 
+/* 118 */     if (file.exists()) {
+/* 119 */       File[] f = new File(this.araFile).listFiles();
+/* 120 */       if (f.length > 0)
+/* 121 */         for (File arenaFile : f) {
+/* 122 */           String arena = arenaFile.getName();
+/* 123 */           File farena = new File(this.araFile + arena);
+/* 124 */           FileConfiguration fc = YamlConfiguration.loadConfiguration(farena);
+/* 125 */           String arenaName = fc.getString("ArenaName");
+/* 126 */           if ((fc.getBoolean("Enabled")) && (arenaName != null)) {
+/* 127 */             enableArena(arenaName);
+/* 128 */             this.plugin.getLogger().info("Enabled Arena " + arenaName);
+/*     */           }
+/* 130 */           else if (arenaName != null) {
+/* 131 */             this.plugin.getLogger().info("Disabled Arena " + arenaName);
+/*     */           }
+/*     */         }
+/*     */     }
 /*     */   }
-/*     */   public Integer getLives(Player p) {
-/* 141 */     return (Integer)this.live.get(p);
+/*     */ 
+/*     */   public Location getLocation(String arena, String name)
+/*     */   {
+/* 141 */     FileConfiguration c = Config.get().getArenaConfig(arena);
+/* 142 */     double x = c.getDouble(name + ".X");
+/* 143 */     double y = c.getDouble(name + ".Y");
+/* 144 */     double z = c.getDouble(name + ".Z");
+/* 145 */     double pd = c.getDouble(name + ".P");
+/* 146 */     double yad = c.getDouble(name + ".Ya");
+/* 147 */     float p = (float)pd;
+/* 148 */     float ya = (float)yad;
+/* 149 */     String worldname = c.getString(name + ".World");
+/* 150 */     World world = Bukkit.getWorld(worldname);
+/* 151 */     Location Loc = new Location(world, x, y, z, ya, p);
+/* 152 */     return Loc;
+/*     */   }
+/*     */ 
+/*     */   public void resetArenas()
+/*     */   {
+/*     */   }
+/*     */ 
+/*     */   public void signUpdate(String arena) {
+/* 160 */     FileConfiguration c = Config.get().getArenaConfig(arena);
+/* 161 */     int signNum = c.getInt("signs");
+/* 162 */     if (Game.get().getPlyNum(arena) == null) {
+/* 163 */       Game.get().setPlyNum(arena, 0);
+/*     */     }
+/* 165 */     for (int i = 1; i <= signNum; i++) {
+/* 166 */       World w = Bukkit.getWorld("world");
+/* 167 */       Location dumbLoc = new Location(w, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+/* 168 */       if ((getLocation(arena, "sign" + Integer.toString(i)) != dumbLoc) && (getLocation(arena, "sign" + Integer.toString(i)).getBlock().getType() != Material.AIR)) {
+/* 169 */         Location Loc = getLocation(arena, "sign" + Integer.toString(i));
+/* 170 */         Sign s = (Sign)Loc.getBlock().getState();
+/* 171 */         if ((s.getLine(0).equalsIgnoreCase(scb)) && (!Game.get().getAIngame(arena))) {
+/* 172 */           s.setLine(1, "§4§lJoin");
+/* 173 */           s.setLine(3, "(" + Game.get().getPlyNum(arena).toString() + "/4)");
+/* 174 */           s.update();
+/*     */         }
+/* 176 */         else if ((s.getLine(0).equalsIgnoreCase(scb)) && (Game.get().getAIngame(arena))) {
+/* 177 */           s.setLine(1, ChatColor.RED + "Join");
+/* 178 */           s.setLine(3, "(" + Game.get().getPlyNum(arena).toString() + "/4)");
+/* 179 */           s.update();
+/*     */         }
+/*     */       }
+/*     */     }
+/*     */   }
+/*     */ 
+/* 185 */   public void scoreUpdate(String arena) { ScoreboardManager m = Bukkit.getScoreboardManager();
+/* 186 */     Scoreboard b = m.getNewScoreboard();
+/* 187 */     Objective o = b.registerNewObjective(arena, arena);
+/* 188 */     o.setDisplaySlot(DisplaySlot.SIDEBAR);
+			  Score score = null;
+/* 189 */     Player[] plys = Game.get().getPlys(arena);
+/*     */ 
+/* 191 */     for (Player p : plys) {
+/* 192 */       o.setDisplayName("§6§lLIVES");
+				if(p.getDisplayName().length() >= 14)
+/* 193 */       score = o.getScore(p.getDisplayName().substring(0, 14) + ":");
+				else
+				score = o.getScore(p.getDisplayName() + ":");
+/* 194 */       score.setScore(PlayerManager.get().getLives(p).intValue());
+/*     */     }
+/* 196 */     for (Player p : plys)
+/* 197 */       p.setScoreboard(b); }
+/*     */ 
+/*     */   public void scorebRemove(Player p)
+/*     */   {
+/* 201 */     ScoreboardManager m = Bukkit.getScoreboardManager();
+/* 202 */     Scoreboard b = m.getNewScoreboard();
+/* 203 */     p.setScoreboard(b);
+/*     */   }
+/*     */   public void scoreLobbyUpdate(Player p) {
+/* 206 */     if (this.plugin.getConfig().getBoolean("OutsideStats")) {
+/* 207 */       ScoreboardManager m = Bukkit.getScoreboardManager();
+/* 208 */       Scoreboard b = m.getNewScoreboard();
+/* 209 */       Objective o = b.registerNewObjective(p.getName(), p.getName());
+/* 210 */       o.setDisplaySlot(DisplaySlot.SIDEBAR);
+/* 211 */       o.setDisplayName("§6§lSCB");
+/* 212 */       File f = new File(this.plyFile + p.getName() + ".yml");
+/* 213 */       FileConfiguration fc = YamlConfiguration.loadConfiguration(f);
+/* 214 */       Score score = o.getScore("§eTokens:");
+/* 215 */       Score score2 = o.getScore("§aWins:");
+/* 216 */       Score score3 = o.getScore("§cLosses:");
+/* 217 */       score.setScore(fc.getInt("Gems"));
+/* 218 */       score2.setScore(fc.getInt("Wins"));
+/* 219 */       score3.setScore(fc.getInt("Losses"));
+/* 220 */       p.setScoreboard(b);
+/*     */     }
+/*     */   }
+/*     */ 
+/* 224 */   public boolean nullC(String s) { if (s != null) {
+/* 225 */       return true;
+/*     */     }
+/* 227 */     return false;
 /*     */   }
 /*     */ }
+
+/* Location:           /Users/colemanfortson/Downloads/SCB_R2.0 (1).jar
+ * Qualified Name:     Pauldg7.plugins.SCB.managers.Arena
+ * JD-Core Version:    0.6.2
+ */
