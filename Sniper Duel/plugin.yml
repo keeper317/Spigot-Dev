@@ -1,0 +1,10 @@
+name: Sniper Duel
+main: mediaapps.duel.Main
+version: 0.1
+authors: [MediaApps, keeper317]
+description: Sniper Duel Minigame
+commands:
+   sd:
+      description: controls the plugin
+      usage: /sh 
+   

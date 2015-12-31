@@ -1,0 +1,9 @@
+name: Redeem
+main: mediaapps.redeem.Main
+version: 1
+authors: [MediaApps, keeper317]
+description: redeem plugin
+commands:
+   redeem:
+      description: Allows for one time redeem of 2500 tokens
+      usage: /redeem

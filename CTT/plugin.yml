@@ -1,0 +1,19 @@
+name: CTT
+main: net.CTT.src.Main
+version: 0.0.3
+authors: [MediaApps, keeper317]
+description: Capture the Tower
+hard-depend: [Vault]
+commands:
+   CTT:
+      description: Set up command
+      usage: /CTT [(r/b)spawn/lobby/(r/b)monument/(r/b)corner]
+   join:
+      description: Join red or blue team
+      usage: /Join [Red/Blue]
+   ForceStart:
+      description: Force Start
+      usage: /ForceStart
+   ForceEnd:
+      description: Force Start
+      usage: /ForceEnd

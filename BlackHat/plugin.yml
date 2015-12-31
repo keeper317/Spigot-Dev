@@ -1,0 +1,9 @@
+name: Black Hat
+main: mediaapps.blackhat.Main
+version: 0.2
+authors: [MediaApps, keeper317]
+description: Black Hat
+commands:
+   bh:
+      description: Opens Black Hat Shop
+      usage: /shop

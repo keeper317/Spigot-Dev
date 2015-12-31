@@ -1,0 +1,16 @@
+name:  FireWork
+main:  mymediaapps.webs.com.FW
+version:  1.1
+load: STARTUP
+description: Spawns Fire Works
+
+commands:
+  FW:
+    description: Uses Fire Works
+    usages: /fw
+    permission: FireWorks.fw.use
+    permission-message: You can't do that. Go Buy VIP to use this.	
+permissions:
+  FireWorks.fw.use:
+    description: Uses FireWorks on /FW typed
+    default: false

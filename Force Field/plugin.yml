@@ -1,0 +1,10 @@
+name: VIPForceFields
+main: de.inventivegames.forcefield.ForceField
+version: 1.6
+website: http://www.inventivegames.de
+author: inventivetalent
+description: >
+            ForceField Plugin - Copyright inventivetalent 2013-2014!
+            
+commands:
+  ForceField:

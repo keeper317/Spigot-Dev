@@ -1,0 +1,43 @@
+name: SuperCubeBrothers
+main: Pauldg7.plugins.SCB.main.SCB
+version: 2.0
+authors: [Pauldg7, MIke1665]
+softdepend: [Vault]
+commands:
+   scb:
+      description: Super Cube Brother Commands
+      usage: /<command> <Type /scb help>
+      permission: scb.commands
+      permission-message: You don't have permission to use that command.
+permissions:
+    scb.*:
+        description: Gives access to all SCB.
+        default: op
+        children:
+            scb.command.create: true
+            scb.command.delete: true
+            scb.command.disable: true
+            scb.command.enable: true
+            scb.command.join: true
+            scb.command.leave: true
+            scb.command.setglobby: true
+            scb.command.setspawn: true
+            scb.command.start: true
+            scb.signs.use: true
+    scb.user:
+        description: Gives access to User SCB Commmands.
+        default: true
+        children:
+            scb.command.join: true
+            scb.command.leave: true
+            scb.signs.use: true
+    scb.mod:
+        description: Gives access to Moderator SCB Commands.
+        default: op
+        children:
+            scb.command.join: true
+            scb.command.leave: true
+            scb.signs.use: true
+            scb.command.start: true
+            scb.command.disable: true
+            scb.command.enable: true
